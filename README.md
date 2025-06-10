@@ -128,20 +128,48 @@ We will deliberately open up the ports to the internet, to create a vulnerable e
       ![image](https://github.com/user-attachments/assets/d57aaf78-271a-4ea9-9917-15f9b3e3ee45)
 
 
+Repeat the same exact process for Linux vm.
+
+
    
-
-        
-       
+</details>
 
 
+##
+<details><summary>🔽Windows Firewall</summary>
 
-    
+We are now going to RDP into our windows vm to urn off the firewall. This will make the environment even more insecure because our firewall blocks unauthorized network access.
+
+Step 1: We will search Windows Remote Dextop Connection (RDP) and then log in with our IP address and the VM's login credentials
+![image](https://github.com/user-attachments/assets/9ae336a0-1387-4333-9bd0-7e0a1656dbda)
+![image](https://github.com/user-attachments/assets/82c3b4c2-5dfc-4fae-829a-48276c0556ce)
+![image](https://github.com/user-attachments/assets/0505228d-3cd3-407b-81d2-ffffb65d74e4)
+
+Step 2: search for Windows Firewall or "wf.msc" 
+![image](https://github.com/user-attachments/assets/d885d045-5492-4737-8678-0e3aa64a9acc)
+
+Step 3: Disable Firewall 
+![image](https://github.com/user-attachments/assets/cc0597a6-3335-41f4-b049-b259aadfe4d5)
+![image](https://github.com/user-attachments/assets/4fd53b16-4d8f-49aa-b28d-6a54cc85107a)
+![image](https://github.com/user-attachments/assets/68de6e1d-669c-4900-b737-b7a25c5d603a)
+![image](https://github.com/user-attachments/assets/b2003179-597d-407d-aec6-c9ce0aee9577)
+![image](https://github.com/user-attachments/assets/b1f88017-a2ca-4e84-97ef-1d2df3c7f6a1)
+
+</details>
 
 
-
+##
+<details><summary>🔽SQL Server Config</summary>
 
 
 </details>
+
+
+
+
+
+
+
 
 
 
