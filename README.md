@@ -1,16 +1,19 @@
 # honey-project
 # Building a SOC + Honeynet in Azure (Live Traffic)
-![Cloud Honeynet / SOC](https://i.imgur.com/ZWxe03e.jpg)
+![image](https://github.com/user-attachments/assets/1974b4f8-7332-4ebd-99c1-59d70491a0b4)
 
-## Introduction
 
-In this project, I build a mini honeynet in Azure and ingest log sources from various resources into a Log Analytics workspace, which is then used by Microsoft Sentinel to build attack maps, trigger alerts, and create incidents. I measured some security metrics in the insecure environment for 24 hours, apply some security controls to harden the environment, measure metrics for another 24 hours, then show the results below. The metrics we will show are:
+In this project, I created a small honeynet in Microsoft Azure — a test environment designed to attract and monitor attacks. I connected different log sources (like virtual machines and active directory data) to my Log Analytics workspace. This workspace sends data to Microsoft Sentinel, where I built visual attack maps, set up alerts, and tracked security incidents.
 
-- SecurityEvent (Windows Event Logs)
-- Syslog (Linux Event Logs)
-- SecurityAlert (Log Analytics Alerts Triggered)
-- SecurityIncident (Incidents created by Sentinel)
-- AzureNetworkAnalytics_CL (Malicious Flows allowed into our honeynet)
+I first ran the environment without any protection for 24 hours to collect security data. Then, I added security controls to make the environment safer and ran it for another 24 hours. Below, I’ll show the results and compare how things changed after applying those security improvements.
+
+The security metrics we’ll look at include:
+
+- SecurityEvent – Windows event logs that record security-related activities on Windows virtual machines, such as logins or failed login attempts.
+- Syslog – These are security logs from Linux virtual machines that help track user activity, errors, and other important system events.
+- SecurityAlert – These are alerts automatically triggered by Microsoft Sentinel when suspicious or potentially harmful activity is detected based on incoming data.
+- SecurityIncident – These are collections of related alerts grouped together by Sentinel that will help us investigate and respond to threats more easily.
+- AzureNetworkAnalytics_CL – This log tracks network traffic, especially showing which potentially malicious connections were allowed into our honeynet (the test environment set up to draw in attackers).
 
 ## Architecture Before Hardening / Security Controls
 ![Architecture Diagram](https://i.imgur.com/aBDwnKb.jpg)
@@ -18,19 +21,129 @@ In this project, I build a mini honeynet in Azure and ingest log sources from va
 ## Architecture After Hardening / Security Controls
 ![Architecture Diagram](https://i.imgur.com/YQNa9Pp.jpg)
 
-The architecture of the mini honeynet in Azure consists of the following components:
+The tools needed for our minihoneynet project will consist of:
 
 - Virtual Network (VNet)
 - Network Security Group (NSG)
-- Virtual Machines (2 windows, 1 linux)
+- Virtual Machines (1st windows, 2nd attack windows, 1 linux)
 - Log Analytics Workspace
 - Azure Key Vault
 - Azure Storage Account
 - Microsoft Sentinel
+- Microsoft Defender for Cloud
+- SQL Server
 
-For the "BEFORE" metrics, all resources were originally deployed, exposed to the internet. The Virtual Machines had both their Network Security Groups and built-in firewalls wide open, and all other resources are deployed with public endpoints visible to the Internet; aka, no use for Private Endpoints.
+##
+<details><summary>🔽Resource Group</summary>
 
-For the "AFTER" metrics, Network Security Groups were hardened by blocking ALL traffic with the exception of my admin workstation, and all other resources were protected by their built-in firewalls as well as Private Endpoint
+The first thing we are going to do is create a resource group so that we have a folder that keeps all the related cloud stuff for a project—like virtual machines, storage, and settings—organized in one place.
+1) Create a name for the resource group. We will call ours  "Honey-Files"
+2) Choose a region where we will deploy our VMS, create our log analytic workspace, NSGS etc
+
+![image](https://github.com/user-attachments/assets/3e0e8f6e-6217-410f-a1bf-03a6808f5e1d)
+
+![image](https://github.com/user-attachments/assets/d289e4e5-af69-4022-b8ad-4a7c381e9715)
+
+</details>
+
+##
+<details><summary>🔽Windows Virtual Machine</summary>
+
+Create Windows 10 Pro Virtual Machine
+![image](https://github.com/user-attachments/assets/dbcbfc22-8670-4d1d-9941-d19e8a36cb32)
+
+
+1.Use the same resource group created
+2. Name the VM: (windows-vm)
+3. Region: EAST US 2
+4. Resource Group: RG-Cyber-Lab
+5. Virtual Network: Lab-VNet
+
+When done review and create.
+![image](https://github.com/user-attachments/assets/988f455b-3bc1-4786-87be-2dffd995af97)
+![image](https://github.com/user-attachments/assets/5afbdc77-6199-46af-8591-7124d78d4382)
+![image](https://github.com/user-attachments/assets/149f3c6e-1572-4e80-bd05-631fe4fc1aa7)
+
+
+
+</details>
+
+
+##
+<details><summary>🔽 Linux Virtual Machine</summary>
+
+Create  Ubuntu (Linux) Virtual Machine
+1. Name the VM: (linux-vm).
+2. Same Region, Resource Group, and VNet as windows-vm
+3. We will use a username and password instead for authentication
+   
+![image](https://github.com/user-attachments/assets/1f00074f-ba53-4036-85b8-854cb5cee22b)
+![image](https://github.com/user-attachments/assets/0513b906-e447-4918-91cd-9e26e842afe9)
+![image](https://github.com/user-attachments/assets/a61c97e3-7aa2-4cf3-824f-a95f85024325)
+![image](https://github.com/user-attachments/assets/875b1bf6-613f-4c1c-a9ea-17951ced3a24)
+
+
+We will deliberately open up the ports to the internet, to create a vulnerable environment so that we can attract attention from the red team.
+</details>
+
+
+##
+<details><summary>🔽 Windows Attack Virtual Machine</summary>
+
+  Create another Windows VM in a region and zone outside the US and NAME IT “attack-vm”
+1. Name: attack-vm
+2. Resource Group: RED-FILES
+3. Region: Asia Pacific- East Asia
+   ![image](https://github.com/user-attachments/assets/744c5d54-60da-46d5-b510-f7b61626678d)
+   ![image](https://github.com/user-attachments/assets/a421f58c-790a-4e3f-a572-3b2f13168a63)
+![image](https://github.com/user-attachments/assets/762b12b8-0983-4b61-86a9-95a7b7bc2259)
+
+   
+
+</details>
+
+
+##
+<details><summary>🔽 Network Security Group Config</summary>
+
+- Our Network Security Group is the firewall or security gate of our virtual network. 
+- It decides who is allowed in or ho gets bloackd when trying to conect to our virtual machine.
+- We will open up the gates all the way, so anyone can cnnect out VMs.
+
+  Inbound Rules
+  - Inbound is all the traffic coming into our vms.
+  - Inbond Rules will allow or block that traffic. If we dont allow traffic then our VMS will just sit there without keeping track of any activity or alerts to log.
+ 
+    Step by Step Breakdown
+    1) We will go to our windows vm and locate the network settings
+       ![image](https://github.com/user-attachments/assets/d4cf4581-1f5b-452b-99da-d7fa693e65d2)
+
+    2) Create a new inbound rule
+       ![image](https://github.com/user-attachments/assets/c0beab45-bb75-4487-bddf-fd1e663e84b3)
+
+      -  We will change the desintation port range from 8080 to * allowing inbound traffic from any port.
+      -  We will change the priority to 100 which is the minimum. The lower the number the higher the priority will be compared to ther inbound rule that are already present.
+      -  we will name the rule "DangerAllowAnyCustomAnyInbound"
+      -  Keep everything else at default and press Add.
+      ![image](https://github.com/user-attachments/assets/d57aaf78-271a-4ea9-9917-15f9b3e3ee45)
+
+
+   
+
+        
+       
+
+
+
+    
+
+
+
+
+
+</details>
+
+
 
 ## Attack Maps Before Hardening / Security Controls
 ![NSG Allowed Inbound Malicious Flows](https://i.imgur.com/1qvswSX.png)<br>
