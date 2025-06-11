@@ -216,7 +216,66 @@ Step 4: Configure audit object access setting in Windows VM (use a command line 
 
    1) Open Command Line as an admin
       ![image](https://github.com/user-attachments/assets/91cf1344-b3f3-4bc8-8743-df2cff447daf)
-   2) 
+  
+   2) Type this command "auditpol /set /subcategory:"application generated" /success:enable /failure:enable"
+      ![image](https://github.com/user-attachments/assets/ef4eb241-ad92-4d29-964a-27e8b72aa91c)
+
+Step 5: Enable auditing on the connector app for our SQL Server (SQL SERVER MANAGEMENT STUDIO or SSMS)
+
+   1) Open SSMS
+      ![image](https://github.com/user-attachments/assets/c3758305-cb7f-4ca8-9c74-91d628b4e694)
+
+   2) Login with credentials from SQL Server setup and connect
+       ![image](https://github.com/user-attachments/assets/ef618dd0-dd8d-4819-9c40-5b69a8241cb8)
+   
+   3) Rightclick and go to properties
+      ![image](https://github.com/user-attachments/assets/15f77618-6f59-4fcd-ace5-5cbc3cba1eae)
+
+   4) When you enter "Security" change settings to "both failed and succesful logins"
+      ![image](https://github.com/user-attachments/assets/0d16045f-f780-4de9-8f62-c8640799e4f4)
+
+   5) Restart settings to solidify changes.
+      ![image](https://github.com/user-attachments/assets/77e7f33f-1c08-4938-bc1a-d378dedac4ba)
+
+
+</details>
+
+
+
+
+##
+<details><summary>🔽Log Analytics Workspace</summary>
+
+We will be creating our Log Analytic Workspace or "LAW" (soc-surveillance). This is the nucleus of our honeynet project. It is like a giant cloud notebook that collects and organzies data so that we can detect and investigate suspiscious activity. This will be the location of all of our activities in active directory, virtual network, network security groups, and our SIEM (Sentinel) 
+
+Step 1: search Log Analytic Workspace 
+   ![image](https://github.com/user-attachments/assets/8da7b451-be34-4d2d-9c03-20d6da3d0490)
+
+Step 2: Create 
+   1) We are using our same resource group "Honey-Files"
+   2) We will call our LAW "soc-surveillance"
+   3) Same region as Resource group and Virtual machines
+   4) Review and Create
+   
+   ![image](https://github.com/user-attachments/assets/8f5e4aed-894b-4b0b-ae6d-bc928be8ec5e)
+   ![image](https://github.com/user-attachments/assets/79a8969e-54b9-4f70-819e-268f6362c625)
+   ![image](https://github.com/user-attachments/assets/67369938-f8a3-4462-a527-9c0ed3ef4a46)
+
+
+   
+   
+
+
+
+
+
+
+
+
+      
+
+
+
 
 
 
