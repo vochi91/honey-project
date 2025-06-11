@@ -155,11 +155,45 @@ Step 3: Disable Firewall
 ![image](https://github.com/user-attachments/assets/b2003179-597d-407d-aec6-c9ce0aee9577)
 ![image](https://github.com/user-attachments/assets/b1f88017-a2ca-4e84-97ef-1d2df3c7f6a1)
 
+Step 4: Test Firewall vulnerability by using my windows vm to ping my linux vm.
+Open command line on windows, type ping and then the ip address of linux.
+![image](https://github.com/user-attachments/assets/4e555d51-4245-4745-8aa7-09b0a42981aa)
+
+Firewall is down now so other devices will be able to have access.
+
+
 </details>
 
 
 ##
 <details><summary>🔽SQL Server Config</summary>
+
+- SQL Server is a database that stores information such as passwords, logs etc.
+- Since they hold sensitive information, they are easy targets for hackers.
+- We are going to install SQL server so that we can have instrument to generate logs.
+
+
+  Step 1: In the windows vm, install SQL server eval: https://www.microsoft.com/en-us/evalcenter/evaluate-sql-server-2019
+  ![image](https://github.com/user-attachments/assets/9f5c368a-de7b-4fda-8215-eeda19b92411)
+  ![image](https://github.com/user-attachments/assets/d55aa113-f2fa-42df-90a8-8aa07763857a)
+  ![image](https://github.com/user-attachments/assets/b1125d59-ba17-45ba-b13b-a251456559fd)
+  ![image](https://github.com/user-attachments/assets/36fe98b6-f61d-497e-83d4-854937085044)
+  ![image](https://github.com/user-attachments/assets/70d93635-b6f5-42c9-9c22-ac241a98fac0)
+  ![image](https://github.com/user-attachments/assets/43f11f46-f98e-4d2a-a007-96844331a6b8)
+  ![image](https://github.com/user-attachments/assets/d160fcba-8cb0-427d-bb3d-e86fb8900d7a)
+  ![image](https://github.com/user-attachments/assets/4c9d6efe-75cf-4d0d-8c85-8dcf51e58aed)
+  ![image](https://github.com/user-attachments/assets/0f8d6d21-9dc5-42e6-8840-5a56c12bced0)
+
+
+
+
+
+
+
+
+
+
+
 
 
 </details>
