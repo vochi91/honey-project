@@ -183,6 +183,57 @@ Firewall is down now so other devices will be able to have access.
   ![image](https://github.com/user-attachments/assets/d160fcba-8cb0-427d-bb3d-e86fb8900d7a)
   ![image](https://github.com/user-attachments/assets/4c9d6efe-75cf-4d0d-8c85-8dcf51e58aed)
   ![image](https://github.com/user-attachments/assets/0f8d6d21-9dc5-42e6-8840-5a56c12bced0)
+  ![image](https://github.com/user-attachments/assets/bb450b9c-3a39-4731-b4ec-44424f8d3cec)
+  ![image](https://github.com/user-attachments/assets/871b8027-2e9d-4a7c-a129-49e4cdfea9d8)
+  ![image](https://github.com/user-attachments/assets/ab1cfb28-1d4d-43d6-a7be-51c4452a3028)
+  ![image](https://github.com/user-attachments/assets/efd1d273-1f23-463f-8259-2ac21e4cac74)
+  ![image](https://github.com/user-attachments/assets/1bb77c0d-3e79-4233-93e9-552a35382d1f)
+  ![image](https://github.com/user-attachments/assets/e77bcd6a-c8b6-4410-b78e-ed8ceb027d4a)
+  ![image](https://github.com/user-attachments/assets/8a214e1b-a365-4945-8451-59e829eb8a89)
+
+
+Step 2; Download SQL Server Management Studio (connecting app to our SQL database): https://sqlserverbuilds.blogspot.com/2018/01/sql-server-management-studio-ssms.html#google_vignette
+
+![image](https://github.com/user-attachments/assets/10618625-200a-43e5-9f2b-6e7a905c00b8)
+![image](https://github.com/user-attachments/assets/9203fb91-22a4-44b8-95d7-7e960c967702)
+![image](https://github.com/user-attachments/assets/4ac66ef9-86d9-4fc6-84a9-dcfbeb948a4a)
+
+Step 3: We will enable logging for our SQL
+
+   1) Go to Registry Editor on windows search
+   ![image](https://github.com/user-attachments/assets/778d0d1d-2fd6-431a-a715-00867f5ad625)
+
+   2) In this order: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\EventLog\Security
+   ![image](https://github.com/user-attachments/assets/f9f6f9cc-e685-4cb7-a0ac-66d8047c2975)
+   ![image](https://github.com/user-attachments/assets/537aa0bb-1bbd-41a9-90f2-300032198293)
+
+   3) Right click Security key, go to permission
+   ![image](https://github.com/user-attachments/assets/f85f0c14-bdce-409d-9a30-369fe97aff15)
+   ![image](https://github.com/user-attachments/assets/8a7d0902-d126-41c6-9f74-e780371f91ef)
+   ![image](https://github.com/user-attachments/assets/b963fc1b-1fa2-4f29-a0ac-6c40c7fb2c69)
+
+Step 4: Configure audit object access setting in Windows VM (use a command line to turn on windows logging to view suspicious activity)
+
+   1) Open Command Line as an admin
+      ![image](https://github.com/user-attachments/assets/91cf1344-b3f3-4bc8-8743-df2cff447daf)
+   2) 
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
 
 
 
