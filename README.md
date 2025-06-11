@@ -270,7 +270,7 @@ Step 2: Create
 
 
 
-
+##
 <details><summary>🔽Microsoft Sentinel</summary>
 
 
@@ -285,14 +285,51 @@ Step 2: Connect to LAW
 
    ![image](https://github.com/user-attachments/assets/313cd8bb-6d7d-4168-8ac4-0fe3149e7365)
 
+Step 3: Create a watchlist in Sentinel
+- We will upload IP-related geodata as a reference point for Sentinel in the future to intelligently track more suspicious activity.
+- This will help narrow down our search to a certain rgion, city if possible.
+
+   1) Go to Sentinel and locate watchlist, then create new.
+     ![image](https://github.com/user-attachments/assets/ca264a15-f3c8-41a6-a15e-e4faf4ab9bbb)
+     ![image](https://github.com/user-attachments/assets/f9a2c862-6f79-4852-8bc1-8c844777680f)
+
+   2) Upload and name geodata file.
+      - Keep name and alias the same.
+        ![image](https://github.com/user-attachments/assets/e3d75cec-b45e-485c-844d-432e81f4bc30)
+        - Upload the gile. Keep everything else default. The only thing you ltar is changing searchkey to network
+          ![image](https://github.com/user-attachments/assets/c2b98955-39dc-440e-adb8-c378cf435867)
+          ![image](https://github.com/user-attachments/assets/8977f07a-b746-4717-9632-b9561889da63)
+
+   3) Go to Log Analytics Workspace and check that Sentinel has received and loaded our geo-data correctly
+      - Go to LAW and then locate the log section
+        ![image](https://github.com/user-attachments/assets/ef54adb6-ab5d-467e-9d8e-595702333dcd)
+      - Make sure KQL mode is on an type in _GetWatchlist("geoip"). If it worked, we’ll see a table appear with columns like country, IP ranges, etc
+        ![image](https://github.com/user-attachments/assets/28a80b80-eec5-4a4e-82f2-8d0323589cb6)
+      -Ensure the download is completed for the watchlist.
+         ![image](https://github.com/user-attachments/assets/ddaa72f1-0f5d-4892-b3d4-a911876fcc7f)
 
 
 
 
-
+   
 
 
 </details>
+
+
+
+
+##
+<details><summary>🔽Microsoft Defender for Cloud</summary>
+
+
+
+
+
+
+
+
+
    
 
 
