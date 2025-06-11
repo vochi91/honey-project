@@ -241,8 +241,6 @@ Step 5: Enable auditing on the connector app for our SQL Server (SQL SERVER MANA
 </details>
 
 
-
-
 ##
 <details><summary>🔽Log Analytics Workspace</summary>
 
@@ -262,7 +260,39 @@ Step 2: Create
    ![image](https://github.com/user-attachments/assets/67369938-f8a3-4462-a527-9c0ed3ef4a46)
 
 
-   
+
+</details>
+
+
+
+
+
+
+
+
+
+<details><summary>🔽Microsoft Sentinel</summary>
+
+
+
+Microsoft Sentinel is our security control room, just like security cameras in a building, it watches every activity that is happening in our system. Through this SIEM we will turn our LAW into a security investigation platform by connecting the two.
+
+Step 1: Create Sentinel
+   ![image](https://github.com/user-attachments/assets/0b84e01e-9ffa-45c4-a775-a6c045800477)
+   ![image](https://github.com/user-attachments/assets/856bb8de-ed26-465b-916d-25685ad70b4d)
+
+Step 2: Connect to LAW
+
+   ![image](https://github.com/user-attachments/assets/313cd8bb-6d7d-4168-8ac4-0fe3149e7365)
+
+
+
+
+
+
+
+
+</details>
    
 
 
@@ -307,6 +337,11 @@ Step 2: Create
 
 
 </details>
+
+
+
+
+
 
 
 
