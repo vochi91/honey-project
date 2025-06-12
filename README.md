@@ -329,52 +329,30 @@ Defender for Cloud is the security guard, the line of defense for our cloud infr
 
 We will take logs from our security groups and vms, injesting them into our LAW.
 
-Step 1: 
+Step 1: Enable Microsoft Defender for Cloud for Log Analytics Workspace
+- Open up MDC on Azure and then go to environment settings.
+   ![image](https://github.com/user-attachments/assets/798cebac-029d-47a2-b28f-12267664fdcc)
+  ![image](https://github.com/user-attachments/assets/0eadd47b-ec95-4891-9fcf-98b96c6d5edc)
+- Scroll down and expand the subscription until we see our LAW, and then edit settings.
+  ![image](https://github.com/user-attachments/assets/b5e6a7c7-b9f4-4a64-ac5e-b0ba9ab77084)
+- Go to defender plans to turn on servers, and sql servers to allow us to collect logs from vms and SQL server.
+  ![image](https://github.com/user-attachments/assets/cfefaf31-b224-4cbb-acb8-66154fdb05bd)
+- Go to data collection and cehck "All Events" so we can collect all events from Windows Security Log
+  ![image](https://github.com/user-attachments/assets/10370b2e-6a57-425f-a702-df773b6ca0d7)
 
+  Step 2: Enable Microsoft Defender for Cloud for Azure Subcription, this ensures MDC is protecting our entire cloud environment — not just the VMs.
+  - Go back to Environment settings, go to Subscription this time and edit settings.
+    ![image](https://github.com/user-attachments/assets/3f0ecc6d-fb3f-4739-a575-ce0b7f633eec)
+  - Under Defender Plans, turn on protection for Servers, Key Vault, Storage, and Databse
+    ![image](https://github.com/user-attachments/assets/5be3fa62-844c-468d-aaaf-7c4ae13fc76d)
 
+Step 3: Enable Microsoft Defender for Cloud Continuous Export in Environment Settings: this will export alerts to LAW for future KQL queries
+- Under Continous Export, go to Log Analytics Workspace and permit all data to be exportd to LAW
+  ![image](https://github.com/user-attachments/assets/a96f178a-8689-45cf-b884-ebca78a99b26)
+  Scroll down and export config to our resource group "Honey-Files", and finally export to our our LAW and save everything.
+     ![image](https://github.com/user-attachments/assets/6cbd40db-6ccd-41f5-99fe-1969f68fc0e5)
 
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
-      
-
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+MDC is eabled.
 
 
 
