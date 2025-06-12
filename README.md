@@ -138,7 +138,7 @@ Repeat the same exact process for Linux vm.
 ##
 <details><summary>🔽Windows Firewall</summary>
 
-We are now going to RDP into our windows vm to urn off the firewall. This will make the environment even more insecure because our firewall blocks unauthorized network access.
+We are now going to RDP into our windows vm to turn off the firewall. This will make the environment even more insecure because our firewall blocks unauthorized network access.
 
 Step 1: We will search Windows Remote Dextop Connection (RDP) and then log in with our IP address and the VM's login credentials
 ![image](https://github.com/user-attachments/assets/9ae336a0-1387-4333-9bd0-7e0a1656dbda)
@@ -322,6 +322,14 @@ Step 3: Create a watchlist in Sentinel
 ##
 <details><summary>🔽Microsoft Defender for Cloud</summary>
 
+Defender for Cloud is the security guard, the line of defense for our cloud infrastructure and all the resources(virtual machine, databases, files etc) in it.
+ - Cloud scans for intruders
+ - Cloud alerts if enemies are nearby
+ - Cloud tells you what walls to harden and reinforce.
+
+We will take logs from our security groups and vms, injesting them into our LAW.
+
+Step 1: 
 
 
 
