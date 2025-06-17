@@ -430,6 +430,11 @@ Step 4: Begin to query logs from LAW from our vms and NSGS. We should see logs f
 
 ![image](https://github.com/user-attachments/assets/7550e8bf-70fd-4248-adad-0b3cad392d9c)
 ![image](https://github.com/user-attachments/assets/cee6cf62-c7de-4f80-992a-2bcdc9e0ca07)
+![image](https://github.com/user-attachments/assets/38e56f77-4c4f-4208-9b2c-b233e6534e96)
+
+
+</details>
+
 
 
 
