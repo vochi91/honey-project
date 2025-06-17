@@ -104,7 +104,7 @@ We will deliberately open up the ports to the internet, to create a vulnerable e
 
 
 ##
-<details><summary>🔽 Network Security Group Config</summary>
+<details><summary>🔽 Network Security Group </summary>
 
 - Our Network Security Group is the firewall or security gate of our virtual network. 
 - It decides who is allowed in or ho gets bloackd when trying to conect to our virtual machine.
@@ -130,6 +130,8 @@ We will deliberately open up the ports to the internet, to create a vulnerable e
 
 Repeat the same exact process for Linux vm.
 
+
+ 
 
    
 </details>
@@ -361,6 +363,99 @@ MDC is eabled.
 
 </details>
 
+
+
+##
+<details><summary>🔽Logging and Monitoring</summary>
+
+In this section we will be configure logging for all of our virtual machines (excluding attack vm) network security groups. It will be a different process for our virtual networks compared to other resources in Azure because our vms require agents to be installed and configured to enable logging.
+
+Step 1: Create a storage account to store our NSG flow logs in.
+   - ![image](https://github.com/user-attachments/assets/bf14c742-1c8f-4bb8-bd18-a265047559c7)
+   - We will name it "securityvault", using the same resource group and region that we have been using. Once done we review and create.
+     ![image](https://github.com/user-attachments/assets/afd47338-2b1d-43bf-8f88-c6f1de0f26e4)
+
+Step 2: Enable flow logs for NSG.
+   - ![image](https://github.com/user-attachments/assets/1fc890a0-bc00-4097-a70c-8c65bca31de5)
+   - Go to anyone of our vm's network security group (there should be one for each vm) and click nsg flow log.
+     ![image](https://github.com/user-attachments/assets/61384461-b6e5-400d-9194-f24ec29fa585)
+     ![image](https://github.com/user-attachments/assets/53985fc1-902b-4762-91db-8f7e7837fd43)
+     - Create a new flow log
+       ![image](https://github.com/user-attachments/assets/a7365fa7-aa02-4339-990d-7d56f1df15d6)
+     - Target resource will be for both network security groups, use the same LAW and storage account that we just created "securityvault"
+       ![image](https://github.com/user-attachments/assets/2f657c0f-203a-4286-9681-131c270c7d0a)
+       ![image](https://github.com/user-attachments/assets/84835d70-997d-4ff0-b891-0e9167196100)
+       ![image](https://github.com/user-attachments/assets/f11563f5-8476-4ecd-9334-29101b209c19)
+      ![image](https://github.com/user-attachments/assets/f05888bf-e225-481a-936e-cca549a167dc)
+
+Step 3: Configure Data Collection Rules for our VMs within Microsoft Sentinel
+
+We will be setting up rules to collect important logs from your Virtual Machines (VMs) so that Microsoft Sentinel can monitor them.
+Think of it like: "Hey Sentinel, here are the computers (VMs). I want you to keep an eye on these specific types of events (like login attempts or errors)."
+These rules are called Data Collection Rules (DCRs).
+
+- Go to sentinel and click on our LAW "soc-surveillance".
+   ![image](https://github.com/user-attachments/assets/398f7d30-99a3-451b-bbd3-f9ec3cfdd50d)
+-Scroll down to Cintent Hub under Content Management
+   ![image](https://github.com/user-attachments/assets/e83ccf88-3720-450a-9b6c-5092d1dc1483)
+- We will install monitoring agents for both of our virtual machines. 'Window Security Events" for windows vm and "Syslog" for linux.
+  ![image](https://github.com/user-attachments/assets/22e5b4fd-be6a-455d-aefc-5129e1221917)
+  ![image](https://github.com/user-attachments/assets/1c192cac-8a4d-4adf-b473-171c930a1691)
+- Check under VM -> Settings -> Extensions Applications for both the Windows and Linux VM and ensure the agent is installed with “Provisioning succeeded”
+  ![image](https://github.com/user-attachments/assets/382425a1-e49d-4fed-9ebd-3e4a6efc0044)
+   ![image](https://github.com/user-attachments/assets/8a19bf44-5250-41e4-a66b-257dff66054c)
+  ![image](https://github.com/user-attachments/assets/0bad0f0e-45bd-4738-8b53-9affca7d5dbd)
+-Once installed we will then go to the installed agent to connect to our LAW.
+  ![image](https://github.com/user-attachments/assets/4fbd7f70-15bd-4237-8e6d-d32369ff90da)
+  ![image](https://github.com/user-attachments/assets/e6aee6a1-3207-4de0-a68c-75d977e35369)
+- Create DRC for windows vm "DRC-Windows", connect to same resource group and LAW
+  ![image](https://github.com/user-attachments/assets/1e343d0f-4e8d-41c6-9ebe-794580edfedc)
+  ![image](https://github.com/user-attachments/assets/99f5c2cc-b19d-435e-a60b-6e3c7e06f544)
+  ![image](https://github.com/user-attachments/assets/96671c89-6e79-4328-96f8-a4d7063bb61a)
+  ![image](https://github.com/user-attachments/assets/222a839c-09c3-4c47-a57f-4c622fbe6ea7)
+  ![image](https://github.com/user-attachments/assets/ae4eab12-ebd6-4940-9877-009f3bce7eee)
+- Create DRC for linux vm "DRC-Linux", connect to same resource group and LAW
+  ![image](https://github.com/user-attachments/assets/76e26034-73e6-445a-874e-052a438672e0)
+  ![image](https://github.com/user-attachments/assets/e44ceb7a-b76a-43ee-b357-df1f935ee3f8)
+  ![image](https://github.com/user-attachments/assets/028a0592-78de-4286-889a-e3dff9b151d2)
+  ![image](https://github.com/user-attachments/assets/6ad0b336-a476-406a-9e99-8d77d36f3ed0)
+  ![image](https://github.com/user-attachments/assets/9ddf3971-1797-4310-ad61-6fa299d3a211)
+  ![image](https://github.com/user-attachments/assets/5931dc8c-6b41-4bdf-b780-cecc5117bd85)
+  ![image](https://github.com/user-attachments/assets/c8606fc5-ef8d-475a-a133-9b54bd062342)
+
+Step 4: Begin to query logs from LAW from our vms and NSGS. We should see logs from thse three sources:
+- Syslog(linux)
+- SecurityEvent(windows)
+- AzureNetworkAnalytics_CL(NSG)
+
+![image](https://github.com/user-attachments/assets/7550e8bf-70fd-4248-adad-0b3cad392d9c)
+![image](https://github.com/user-attachments/assets/cee6cf62-c7de-4f80-992a-2bcdc9e0ca07)
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+   
+
+
+
+
+
+
+
+
+     
 
 
 
