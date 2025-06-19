@@ -453,15 +453,18 @@ Step 1: Create Diagnostic Settings to ingest Azure AD Logs on a Tenant Level(Adm
   ![image](https://github.com/user-attachments/assets/e70112f4-edfe-4024-bbab-138ff66f154a)
 
 Step 2: Create Activity to Test the Logs: We're pretending to be a real admin doing admin stuff — we will generate activity that should appear in the logs.
+
 - Create a dummy user, username “dummy_user”
   ![image](https://github.com/user-attachments/assets/2325c631-005d-46b3-a45e-f52f97a9b4c2)
   ![image](https://github.com/user-attachments/assets/9c317cfc-382c-4c94-8276-7312b7c19efd)
   ![image](https://github.com/user-attachments/assets/b9230f23-3ee1-47ba-8326-5668796b839c)
   ![image](https://github.com/user-attachments/assets/3e353cc8-1446-401e-a3c7-7d6c2a986e10)
+
 - Log in with it once in an incognito window.
   ![image](https://github.com/user-attachments/assets/72d7ea3d-94bd-47f9-a65f-4eee2043b761)
   ![image](https://github.com/user-attachments/assets/81b8d6bf-1364-49a4-8f97-0d6c7ab91e09)
   ![image](https://github.com/user-attachments/assets/d1c09a9c-4b16-4f58-99f7-a4e20fa75168)
+
 - Assign the user the role of global administrator
   ![image](https://github.com/user-attachments/assets/ae8e506d-b632-4c9f-a681-ab0edc876502)
   ![image](https://github.com/user-attachments/assets/857a3a98-522e-4be9-8308-586df74c99f5)
@@ -469,18 +472,12 @@ Step 2: Create Activity to Test the Logs: We're pretending to be a real admin do
   ![image](https://github.com/user-attachments/assets/6e371b37-0ed3-4247-b66f-1165f9f8e994)
   ![image](https://github.com/user-attachments/assets/5ff14324-e995-4cba-9044-3e563f6337fa)
   ![image](https://github.com/user-attachments/assets/7a6cc84a-b012-41f4-b82b-f1d8a1a52e3b)
+
 - Delete user 
    -![image](https://github.com/user-attachments/assets/1db9ddfa-c700-4d85-801d-9a55799fc612)
--Go to LAW and observe the logs.
-We want to observe the AuditLog to detect when the dummy user was given a very highly priviledged role as a "Global administrator" using this query:
 
-AuditLogs/ ths tells LAW to look at the audit table showing all of the admin activity.
-| where OperationName == "Add member to role" and Result == "success"/ this filters only the events where user was succesfully added a role
-| where TargetResources[0].modifiedProperties[1].newValue == '"Global Administrator"' or TargetResources[0].modifiedProperties[1].newValue == '"Company Administrator"'/ this will narrow into the details to see if the user was given the global admin or company admin postion(some companies word the title differently so I put both) 
-| order by TimeGenerated desc/ you will put the activity in order from the most recent
-| project TimeGenerated, OperationName, AssignedRole = TargetResources[0].modifiedProperties[1].newValue, Status = Result, TargetResources/ shows me the useful fields I am specifically looking for and removing unneccassary data
-
-
+-This should generate log activity on LAW
+   ![image](https://github.com/user-attachments/assets/6e392d78-7be0-43f8-96fb-8d565956fb75)
 
 
 Step 3: We will zoom out to our entire cloud environment and monitor whats happening in Azure.
@@ -502,6 +499,8 @@ We have now created a pipeline where Azure activities (creating\deleting resourc
   ![image](https://github.com/user-attachments/assets/c7021990-f64b-4c37-a7a8-c04edcfaf7d1)
 
 - Check for logs in LAW
+- ![image](https://github.com/user-attachments/assets/2c7cdd35-0c29-4c4c-b77a-5627693c8ab5)
+
  query: AzureActivity/Look at the Azure Activity log table
 | where ResourceGroup startswith "Critical-Infrastructure-"/Only show actions taken against resource groups whose names start with Critical Infrastructure
 | order by TimeGenerated/order results from newest to oldest
