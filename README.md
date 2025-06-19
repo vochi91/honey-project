@@ -437,9 +437,88 @@ Step 4: Begin to query logs from LAW from our vms and NSGS. We should see logs f
 
 
 
+##
+<details><summary>🔽Microsoft Entra ID  and Azure Activity Log Ingestion</summary>
+
+In this section we will continue to ingest log activity into our LAW, bringing them this time from our Active Directory (Microsoft Entra ID)
+
+Step 1: Create Diagnostic Settings to ingest Azure AD Logs on a Tenant Level(Administrator)
+- Go to Microsoft Entra ID and create DIagnostic Settings (ds-audit-signin)
+   ![image](https://github.com/user-attachments/assets/2325c631-005d-46b3-a45e-f52f97a9b4c2)
+   ![image](https://github.com/user-attachments/assets/f7c20273-0413-4ed1-9bad-2710d9201461)
+   ![image](https://github.com/user-attachments/assets/24865dad-bd24-45c0-b6c6-0547acade01c)
+-Name the setting "ds-audit-signin", w ewill only need to enable the signin logs and audit logs. Send to LAW
+   ![image](https://github.com/user-attachments/assets/0ba68b50-49e8-4aa4-9c14-8a2a8ac63d73)
+- Lets check our LAW to see if tables for "AuditLogs" and "SigninLogs" were created
+  ![image](https://github.com/user-attachments/assets/e70112f4-edfe-4024-bbab-138ff66f154a)
+
+Step 2: Create Activity to Test the Logs: We're pretending to be a real admin doing admin stuff — we will generate activity that should appear in the logs.
+- Create a dummy user, username “dummy_user”
+  ![image](https://github.com/user-attachments/assets/2325c631-005d-46b3-a45e-f52f97a9b4c2)
+  ![image](https://github.com/user-attachments/assets/9c317cfc-382c-4c94-8276-7312b7c19efd)
+  ![image](https://github.com/user-attachments/assets/b9230f23-3ee1-47ba-8326-5668796b839c)
+  ![image](https://github.com/user-attachments/assets/3e353cc8-1446-401e-a3c7-7d6c2a986e10)
+- Log in with it once in an incognito window.
+  ![image](https://github.com/user-attachments/assets/72d7ea3d-94bd-47f9-a65f-4eee2043b761)
+  ![image](https://github.com/user-attachments/assets/81b8d6bf-1364-49a4-8f97-0d6c7ab91e09)
+  ![image](https://github.com/user-attachments/assets/d1c09a9c-4b16-4f58-99f7-a4e20fa75168)
+- Assign the user the role of global administrator
+  ![image](https://github.com/user-attachments/assets/ae8e506d-b632-4c9f-a681-ab0edc876502)
+  ![image](https://github.com/user-attachments/assets/857a3a98-522e-4be9-8308-586df74c99f5)
+  ![image](https://github.com/user-attachments/assets/1a28373c-eab2-4e7d-80fb-6d9d0107bcf1)
+  ![image](https://github.com/user-attachments/assets/6e371b37-0ed3-4247-b66f-1165f9f8e994)
+  ![image](https://github.com/user-attachments/assets/5ff14324-e995-4cba-9044-3e563f6337fa)
+  ![image](https://github.com/user-attachments/assets/7a6cc84a-b012-41f4-b82b-f1d8a1a52e3b)
+- Delete user 
+   -![image](https://github.com/user-attachments/assets/1db9ddfa-c700-4d85-801d-9a55799fc612)
+-Go to LAW and observe the logs.
+We want to observe the AuditLog to detect when the dummy user was given a very highly priviledged role as a "Global administrator" using this query:
+
+AuditLogs/ ths tells LAW to look at the audit table showing all of the admin activity.
+| where OperationName == "Add member to role" and Result == "success"/ this filters only the events where user was succesfully added a role
+| where TargetResources[0].modifiedProperties[1].newValue == '"Global Administrator"' or TargetResources[0].modifiedProperties[1].newValue == '"Company Administrator"'/ this will narrow into the details to see if the user was given the global admin or company admin postion(some companies word the title differently so I put both) 
+| order by TimeGenerated desc/ you will put the activity in order from the most recent
+| project TimeGenerated, OperationName, AssignedRole = TargetResources[0].modifiedProperties[1].newValue, Status = Result, TargetResources/ shows me the useful fields I am specifically looking for and removing unneccassary data
 
 
 
+
+Step 3: We will zoom out to our entire cloud environment and monitor whats happening in Azure.
+
+-  Configure Azure to send platform activity logs to your workspace, so you can query them with KQL. Go to Monitor>Activity LOG>Export Activity Log
+  ![image](https://github.com/user-attachments/assets/e367cb06-f0a4-4202-ae9b-0b0cc835ad07)
+  ![image](https://github.com/user-attachments/assets/47c15d7a-a363-4ea7-bd69-aa8993313244)
+  ![image](https://github.com/user-attachments/assets/8db8a5f7-798f-4ccf-8ca6-f61bc9c69589)
+- Create Diagnostic Settings (ds-azureactivity) and add to LAW
+  ![image](https://github.com/user-attachments/assets/3720865e-d037-4367-9478-0482944951bf)
+  ![image](https://github.com/user-attachments/assets/732407b3-5d59-4bb5-971b-59d4add33212)
+
+We have now created a pipeline where Azure activities (creating\deleting resource groups) can be ingested into our LAW. We will now generate logs.
+- Create resource group "Scratch-Resource-Group" and "Critical-Infrastructure-Wastewater"
+  ![image](https://github.com/user-attachments/assets/8c304a3f-5c0b-4199-9086-1bd74cb87f13)
+  ![image](https://github.com/user-attachments/assets/fffc957e-7ac2-40ae-84a1-bbfaf65d4518)
+- Delete both
+  ![image](https://github.com/user-attachments/assets/a0487dc1-4d5e-4935-8190-caae9ca75c39)
+  ![image](https://github.com/user-attachments/assets/c7021990-f64b-4c37-a7a8-c04edcfaf7d1)
+
+- Check for logs in LAW
+ query: AzureActivity/Look at the Azure Activity log table
+| where ResourceGroup startswith "Critical-Infrastructure-"/Only show actions taken against resource groups whose names start with Critical Infrastructure
+| order by TimeGenerated/order results from newest to oldest
+![image](https://github.com/user-attachments/assets/0a6e32d6-a8e5-404b-977f-1ea2a4d2abfb)
+
+
+
+
+
+</details>
+
+  
+   
+
+
+
+   
 
 
 
