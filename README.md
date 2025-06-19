@@ -483,18 +483,24 @@ Step 2: Create Activity to Test the Logs: We're pretending to be a real admin do
 Step 3: We will zoom out to our entire cloud environment and monitor whats happening in Azure.
 
 -  Configure Azure to send platform activity logs to your workspace, so you can query them with KQL. Go to Monitor>Activity LOG>Export Activity Log
+
   ![image](https://github.com/user-attachments/assets/e367cb06-f0a4-4202-ae9b-0b0cc835ad07)
   ![image](https://github.com/user-attachments/assets/47c15d7a-a363-4ea7-bd69-aa8993313244)
   ![image](https://github.com/user-attachments/assets/8db8a5f7-798f-4ccf-8ca6-f61bc9c69589)
+
 - Create Diagnostic Settings (ds-azureactivity) and add to LAW
+
   ![image](https://github.com/user-attachments/assets/3720865e-d037-4367-9478-0482944951bf)
   ![image](https://github.com/user-attachments/assets/732407b3-5d59-4bb5-971b-59d4add33212)
 
 We have now created a pipeline where Azure activities (creating\deleting resource groups) can be ingested into our LAW. We will now generate logs.
 - Create resource group "Scratch-Resource-Group" and "Critical-Infrastructure-Wastewater"
-  ![image](https://github.com/user-attachments/assets/8c304a3f-5c0b-4199-9086-1bd74cb87f13)
+
+   ![image](https://github.com/user-attachments/assets/8c304a3f-5c0b-4199-9086-1bd74cb87f13)
   ![image](https://github.com/user-attachments/assets/fffc957e-7ac2-40ae-84a1-bbfaf65d4518)
+
 - Delete both
+
   ![image](https://github.com/user-attachments/assets/a0487dc1-4d5e-4935-8190-caae9ca75c39)
   ![image](https://github.com/user-attachments/assets/c7021990-f64b-4c37-a7a8-c04edcfaf7d1)
 
@@ -519,6 +525,42 @@ We have now created a pipeline where Azure activities (creating\deleting resourc
 
    
 
+##
+<details><summary>🔽Blob Storage/summary>
+
+ Storage accounts hold sensitive data such as secrets, logs, reads and scripts. Attackers would love to go after these first so its important that we log the activity that goes on there (read, write, delete etc)
+
+ Step 1: Configure storage account.
+
+ - Got to our storage account and enable diagnostic settings for blob storage (ds-blob).
+
+   ![image](https://github.com/user-attachments/assets/228dc805-2dc3-4014-b2c3-d6cd94204922)
+   ![image](https://github.com/user-attachments/assets/4bff9ec6-d1f9-4539-8db8-974b79c3b158)
+   ![image](https://github.com/user-attachments/assets/3d60f120-5bac-4a5f-b33d-6744129eb325)
+   ![image](https://github.com/user-attachments/assets/98b5eb59-4d42-499b-9654-2c2eaa2d3956)
+
+
+Step 2: Generate logs by uplaoding and deleting mock blob files'
+
+- In the storage account go to container and upload a new file.
+  ![image](https://github.com/user-attachments/assets/57fae4dc-7033-4aa7-99ba-a182e0a769ea)
+  ![image](https://github.com/user-attachments/assets/10118897-657a-4f3d-af62-c6fba1f334d9)
+  ![image](https://github.com/user-attachments/assets/57980421-710f-409d-84d2-849197a9e1a6)
+  ![image](https://github.com/user-attachments/assets/63d5c4a3-6594-44ee-8f91-57b72df5588a)
+  ![image](https://github.com/user-attachments/assets/c88b1807-5d48-429b-8bb3-f2959e31f619)
+
+- Delete file
+  ![image](https://github.com/user-attachments/assets/ebaf11f8-f536-40c5-874d-947fcc160d23)
+
+
+Step 3: Go to LAW and view blob logs "StorageBlobLogs"
+
+check to see if LAW recorded deletion of the mock file. In real life situations it's important to keep track of unusual deletion of storage files.
+
+- StorageBlobLogs | where OperationName == "DeleteBlob"
+| where TimeGenerated > ago(24h)
+
+![image](https://github.com/user-attachments/assets/893a82fc-1545-434a-bae8-e55f9e3dd7e3)
 
 
 
@@ -526,10 +568,71 @@ We have now created a pipeline where Azure activities (creating\deleting resourc
 
 
 
+
+
+
+</details>
+
+
+
+
+
+##
+<details><summary>🔽Key Vault</summary>
   
+Key Vault contains secrets, passwords, and keys. It's pretty important to keep track of who is accessing those files, especially if the user doesn't have high priviledges.
+
+Step 1: Configure Logging for Key Vault
+
+- Go to key vault and create new with the same resource group and region.
+  ![image](https://github.com/user-attachments/assets/b3fa8af9-dd89-4629-926d-4d281cdde410)
+  ![image](https://github.com/user-attachments/assets/1b0ca9d4-4673-4100-a49b-392fae58bef7)
+  ![image](https://github.com/user-attachments/assets/06a97693-dc65-40fb-90f1-7f4b61508767)
+
+- Enable Diagnostic setting for Key Vault "ds-keyvault" to send to LAW
+   ![image](https://github.com/user-attachments/assets/df2b8ee9-cebc-43d1-9053-1be6a5781f3d)
+   ![image](https://github.com/user-attachments/assets/6ab756fb-6dae-4b2f-a06f-e7e0f24e604f)
 
 
-   
+
+Step 2: Add a Test Secret. This will generate logs for accessing secrets and passwords in the key vault
+
+- Go to our newly created key vault and create a new secret “Tenant-Global-Admin-Password” and create new password
+
+  ![image](https://github.com/user-attachments/assets/f815fe2b-245b-45c0-abbe-63d889a33103)
+  ![image](https://github.com/user-attachments/assets/80a6bfa8-f33b-4cc2-8f91-80043e0e32e9)
+  ![image](https://github.com/user-attachments/assets/8ed7650d-676a-4ced-9adb-f2dd8db655cc)
+
+
+- Create a log by accessing newly created secret.
+  ![image](https://github.com/user-attachments/assets/f4b714a2-a923-449b-821a-3d20e2302dbc)
+  ![image](https://github.com/user-attachments/assets/ab95c952-3131-4485-883e-ace387323f9b)
+  ![image](https://github.com/user-attachments/assets/65d72e31-8a9a-4ce2-b8f4-76c17cfc3e1f)
+  ![image](https://github.com/user-attachments/assets/22cba163-e45d-4ef2-8f2d-35fa3a10409f)
+
+
+Step 3: Go to LAW and view KeyVault logs "AzureDiagnostics"
+
+ - Lets scan for logs that show that the secret was accessed in the key vault
+
+   AzureDiagnostics
+| where ResourceProvider == "MICROSOFT.KEYVAULT"
+| where Resource == "AKVAULT100"
+| where OperationName == "VaultGet"
+| where ResultType == "Success"
+| project ResourceProvider, Resource, OperationName, ResultType
+
+![image](https://github.com/user-attachments/assets/38e54cac-4265-4d99-9773-7f75efb18b27)
+
+
+
+
+
+
+
+
+
+   </details>
 
 
 
