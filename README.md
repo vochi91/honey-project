@@ -16,7 +16,9 @@ The security metrics we’ll look at include:
 - AzureNetworkAnalytics_CL – This log tracks network traffic, especially showing which potentially malicious connections were allowed into our honeynet (the test environment set up to draw in attackers).
 
 ## Architecture Before Hardening / Security Controls
-![Architecture Diagram](https://i.imgur.com/aBDwnKb.jpg)
+![image](https://github.com/user-attachments/assets/e17b03cd-b7a7-4aa4-97dd-941a7ddb8645)
+
+)
 
 ## Architecture After Hardening / Security Controls
 ![Architecture Diagram](https://i.imgur.com/YQNa9Pp.jpg)
