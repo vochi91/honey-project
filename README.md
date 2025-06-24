@@ -526,7 +526,7 @@ We have now created a pipeline where Azure activities (creating\deleting resourc
    
 
 ##
-<details><summary>🔽Blob Storage/summary>
+<details><summary>🔽Blob Storage</summary>
 
  Storage accounts hold sensitive data such as secrets, logs, reads and scripts. Attackers would love to go after these first so its important that we log the activity that goes on there (read, write, delete etc)
 
